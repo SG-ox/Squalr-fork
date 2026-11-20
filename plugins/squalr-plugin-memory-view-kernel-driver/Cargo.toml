@@ -1,0 +1,18 @@
+[package]
+name = "squalr-plugin-memory-view-kernel-driver"
+version = "0.4.0"
+edition = "2024"
+
+[dependencies]
+squalr-engine-api = { path = "../../squalr-engine-api" }
+squalr-engine-targets-native = { path = "../../squalr-engine-targets-native" }
+log = { version = "0.4.29" }
+thiserror = "2.0.18"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-sys = { version = "0.61.2", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_IO",
+] }

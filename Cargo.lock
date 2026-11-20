@@ -5327,6 +5327,7 @@ dependencies = [
  "squalr-plugin-instructions-powerpc",
  "squalr-plugin-instructions-x86",
  "squalr-plugin-memory-view-dolphin",
+ "squalr-plugin-memory-view-kernel-driver",
 ]
 
 [[package]]
@@ -5378,6 +5379,17 @@ version = "0.4.0"
 dependencies = [
  "squalr-engine-api",
  "squalr-engine-targets-native",
+]
+
+[[package]]
+name = "squalr-plugin-memory-view-kernel-driver"
+version = "0.4.0"
+dependencies = [
+ "log",
+ "squalr-engine-api",
+ "squalr-engine-targets-native",
+ "thiserror 2.0.18",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

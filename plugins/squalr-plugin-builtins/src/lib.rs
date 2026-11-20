@@ -8,6 +8,7 @@ use squalr_plugin_instructions_arm::ArmFamilyInstructionsPlugin;
 use squalr_plugin_instructions_powerpc::PowerPcFamilyInstructionsPlugin;
 use squalr_plugin_instructions_x86::X86FamilyInstructionsPlugin;
 use squalr_plugin_memory_view_dolphin::DolphinMemoryViewPlugin;
+use squalr_plugin_memory_view_kernel_driver::KernelDriverMemoryViewPlugin;
 
 pub fn get_builtin_plugin_packages() -> Vec<Arc<dyn PluginPackage>> {
     let plugin_packages: Vec<Arc<dyn PluginPackage>> = vec![
@@ -18,6 +19,8 @@ pub fn get_builtin_plugin_packages() -> Vec<Arc<dyn PluginPackage>> {
         Arc::new(X86FamilyInstructionsPlugin::new()),
         Arc::new(BinarySymbolsPlugin::new()),
         Arc::new(NativeDebuggersPlugin::new()),
+        // Registered last so emulator memory views keep priority for their own processes.
+        Arc::new(KernelDriverMemoryViewPlugin::new()),
     ];
 
     plugin_packages
@@ -41,6 +44,22 @@ mod tests {
                 .metadata()
                 .has_plugin_capability(PluginCapability::MemoryView)
         );
+    }
+
+    #[test]
+    fn builtins_include_kernel_driver_memory_view_plugin_package() {
+        let plugins = get_builtin_plugin_packages();
+        let plugin = plugins
+            .iter()
+            .find(|plugin| plugin.metadata().get_plugin_id() == "builtin.memory-view.kernel-driver")
+            .expect("Expected the kernel driver memory-view package to be registered.");
+
+        assert!(
+            plugin
+                .metadata()
+                .has_plugin_capability(PluginCapability::MemoryView)
+        );
+        assert!(!plugin.metadata().get_is_enabled_by_default());
     }
 
     #[test]
